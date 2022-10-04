@@ -1,0 +1,44 @@
+[20:43:32.361] Global cache location '/home/ruusaig/.cache/typescript/4.8', safe file path '/home/ruusaig/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/typingSafeList.json', types map path /home/ruusaig/.emacs.d/.cache/lsp/npm/typescript/lib/node_modules/typescript/lib/typesMap.json
+[20:43:32.362] Processing cache location '/home/ruusaig/.cache/typescript/4.8'
+[20:43:32.362] Trying to find '/home/ruusaig/.cache/typescript/4.8/package.json'...
+[20:43:32.365] Loaded content of '/home/ruusaig/.cache/typescript/4.8/package.json': {"private":true,"dependencies":{"types-registry":"^0.1.611"},"devDependencies":{"@types/async":"^3.2.15","@types/babel__core":"^7.1.19","@types/babel__generator":"^7.6.4","@types/base64-js":"^1.3.0","@types/connect":"^3.4.35","@types/eslint":"^8.4.6","@types/eslint-config-prettier":"^6.11.0","@types/eslint-plugin-prettier":"^3.1.0","@types/inquirer":"^9.0.1","@types/invariant":"^2.2.35","@types/jscodeshift":"^0.11.5","@types/metro-source-map":"^0.66.0","@types/mkdirp":"^1.0.2","@types/prettier":"^2.7.1","@types/react":"^18.0.21","@types/react-native":"^0.70.3","@types/react-native__assets":"^1.0.0","@types/react-refresh":"^0.14.0","@types/react-test-renderer":"^18.0.0","@types/regenerator-runtime":"^0.13.1","@types/scheduler":"^0.16.2","@types/shelljs":"^0.8.11","@types/use-sync-external-store":"^0.0.3","@types/ws":"^8.5.3","@types/yargs":"^17.0.13"}}
+[20:43:32.365] Loaded content of '/home/ruusaig/.cache/typescript/4.8/package-lock.json'
+[20:43:32.385] Adding entry into typings cache: 'async' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/async/index.d.ts'
+[20:43:32.388] Adding entry into typings cache: 'babel__core' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/babel__core/index.d.ts'
+[20:43:32.389] Adding entry into typings cache: 'babel__generator' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/babel__generator/index.d.ts'
+[20:43:32.390] Adding entry into typings cache: 'base64-js' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/base64-js/index.d.ts'
+[20:43:32.391] Adding entry into typings cache: 'connect' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/connect/index.d.ts'
+[20:43:32.393] Adding entry into typings cache: 'eslint' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/eslint/index.d.ts'
+[20:43:32.394] Adding entry into typings cache: 'eslint-config-prettier' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/eslint-config-prettier/index.d.ts'
+[20:43:32.395] Adding entry into typings cache: 'eslint-plugin-prettier' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/eslint-plugin-prettier/index.d.ts'
+[20:43:32.398] Adding entry into typings cache: 'inquirer' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/inquirer/index.d.ts'
+[20:43:32.399] Adding entry into typings cache: 'invariant' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/invariant/index.d.ts'
+[20:43:32.401] Adding entry into typings cache: 'jscodeshift' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/jscodeshift/index.d.ts'
+[20:43:32.403] Adding entry into typings cache: 'metro-source-map' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/metro-source-map/index.d.ts'
+[20:43:32.405] Adding entry into typings cache: 'mkdirp' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/mkdirp/index.d.ts'
+[20:43:32.406] Adding entry into typings cache: 'prettier' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/prettier/index.d.ts'
+[20:43:32.411] Adding entry into typings cache: 'react' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/react/index.d.ts'
+[20:43:32.415] Adding entry into typings cache: 'react-native' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/react-native/index.d.ts'
+[20:43:32.416] Adding entry into typings cache: 'react-native__assets' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/react-native__assets/index.d.ts'
+[20:43:32.418] Adding entry into typings cache: 'react-refresh' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/react-refresh/index.d.ts'
+[20:43:32.419] Adding entry into typings cache: 'react-test-renderer' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/react-test-renderer/index.d.ts'
+[20:43:32.420] Adding entry into typings cache: 'regenerator-runtime' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/regenerator-runtime/index.d.ts'
+[20:43:32.421] Adding entry into typings cache: 'scheduler' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/scheduler/index.d.ts'
+[20:43:32.423] Adding entry into typings cache: 'shelljs' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/shelljs/index.d.ts'
+[20:43:32.423] Adding entry into typings cache: 'use-sync-external-store' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/use-sync-external-store/index.d.ts'
+[20:43:32.425] Adding entry into typings cache: 'ws' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/ws/index.d.ts'
+[20:43:32.427] Adding entry into typings cache: 'yargs' => '/home/ruusaig/.cache/typescript/4.8/node_modules/@types/yargs/index.d.ts'
+[20:43:32.427] Finished processing cache location '/home/ruusaig/.cache/typescript/4.8'
+[20:43:32.427] Process id: 343456
+[20:43:32.427] NPM location: "/usr/bin/npm" (explicit '--npmLocation' not  provided)
+[20:43:32.427] validateDefaultNpmLocation: true
+[20:43:32.427] Npm config file: /home/ruusaig/.cache/typescript/4.8/package.json
+[20:43:32.427] Updating types-registry npm package...
+[20:43:32.428] Exec: "/usr/bin/npm" install --ignore-scripts types-registry@latest
+[20:43:33.813]     Succeeded. stdout:
+    
+    up to date, audited 49 packages in 973ms
+
+found 0 vulnerabilities
+
+[20:43:33.813] Updated types-registry npm package

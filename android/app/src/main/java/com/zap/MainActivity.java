@@ -1,5 +1,6 @@
 package com.zap;
 
+import android.os.Bundle;
 import android.content.Intent;
 import android.content.res.Configuration;
 
@@ -16,6 +17,11 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "Zap";
+  }
+
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
   }
 
   @Override

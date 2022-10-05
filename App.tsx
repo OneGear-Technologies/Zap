@@ -1,49 +1,28 @@
 import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native';
+import HomeScreen from './screens/HomeScreen'
+import PostScan from './screens/PostScan'
+
 import {
-  StyleSheet,
   Text,
   View,
   useColorScheme,
 } from 'react-native';
 
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const colorScheme = useColorScheme();
-
-  const textTheme = colorScheme === 'light' ? styles.lightThemeText : styles.darkThemeText
-  const containerTheme = colorScheme === 'light' ? styles.lightContainer : styles.darkContainer
-
   return (
-    <View style={[styles.container, containerTheme]}>
-      <Text style={[styles.text, textTheme]}>Colour Theme: { colorScheme } </Text>
-    </View>
-  );
+    <NavigationContainer>
+      <Stack.Navigator
+	screenOptions={{ headerShown: false }}
+      >
+	<Stack.Screen name="Home" component={HomeScreen} />
+	<Stack.Screen name="PostScan" component={PostScan} />
+    </Stack.Navigator>
+    </NavigationContainer>
+  )
 };
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    jusifyContents: 'center'
-  },
-
-  text: {
-    
-  },
-  
-  lightContainer: {
-    backgroundColor: '#d0d0c0',
-  },
-  darkContainer: {
-    backgroundColor: '#161719',
-  },
-  lightThemeText: {
-    color: '#242c40',
-  },
-  darkThemeText: {
-    color: '#d0d0c0',
-  },
-});
 
 export default App;

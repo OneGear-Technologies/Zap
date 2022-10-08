@@ -6,7 +6,7 @@ import {
 import { globalStyles } from '../styles/GlobalStyles'
 
 
-const PostScan = () => {
+const PostScan = ({ route, navigation }) => {
   const colorScheme = useColorScheme();
 
   const textTheme = colorScheme === 'light' ? globalStyles.lightThemeText : globalStyles.darkThemeText

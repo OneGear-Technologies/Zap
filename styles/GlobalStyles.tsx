@@ -14,7 +14,7 @@ export const globalStyles = StyleSheet.create({
   },
   
   lightContainer: {
-    backgroundColor: '#d0d0c0',
+    backgroundColor: '#dedede',
   },
   darkContainer: {
     backgroundColor: '#161719',

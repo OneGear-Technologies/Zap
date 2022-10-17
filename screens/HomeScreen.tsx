@@ -10,12 +10,14 @@ import {
   View,
   useColorScheme,
   StyleSheet,
+  TouchableOpacity,
+  Button
 } from 'react-native';
 import { globalStyles } from '../styles/GlobalStyles'
-import { useCameraDevices, Camera } from 'react-native-vision-camera'
-import { useScanBarcodes, BarcodeFormat, Barcode } from 'vision-camera-code-scanner'
+import { useCameraDevices, Camera, useFrameProcessor } from 'react-native-vision-camera'
+import { scanBarcodes, BarcodeFormat, Barcode } from 'vision-camera-code-scanner'
 import BottomSheet from '@gorhom/bottom-sheet';
-import { useIsFocused } from '@react-navigation/native';
+import { runOnJS } from 'react-native-reanimated';
 
 const HomeScreen = ({ navigation }) => {
 
@@ -24,7 +26,6 @@ const HomeScreen = ({ navigation }) => {
   const containerTheme = colorScheme === 'light' ? globalStyles.lightContainer : globalStyles.darkContainer
   
   const [hasPermission, setHasPermission] = useState(false)
-  const [scanned, setScanned] = useState(false)
   const [isFocused, setFocused] = useState(true)
 
   
@@ -32,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
   const device = devices.back
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ['10%', '90%'], []);
+  const snapPoints = useMemo(() => ['10%', '100%'], []);
 
 
   const handleSheetChanges = useCallback((index: number) => {
@@ -42,10 +43,21 @@ const HomeScreen = ({ navigation }) => {
       setFocused(false)
   }, []);
   
-  const [frameProcessor, qrcodeScanned] = useScanBarcodes([BarcodeFormat.QR_CODE], {
-    checkInverted: true,
-  });
+  const onQRCodeDetected = useCallback((qrCode : Barcode) => {
+    console.log(qrCode)
+    // TODO: API request, here
+    if(bottomSheetRef.current)
+      bottomSheetRef.current.expand()
+  }, [])
 
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet'
+    const qrCodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
+    if (qrCodes.length > 0) {
+      runOnJS(onQRCodeDetected)(qrCodes[0])
+    }
+  }, [onQRCodeDetected])
+  
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -53,19 +65,6 @@ const HomeScreen = ({ navigation }) => {
     })();
   }, []);
 
-
-  if(qrcodeScanned.length && !scanned)
-  {
-    const item = qrcodeScanned.pop()
-    console.log(item["displayValue"])
-
-    // checking with the API
-    // TODO: add smthn, like a "disable qrscan" until after the request is over? so it won't be spammed over and over again
-    // this disable qrscan will simply stop scanning any new qr codes, until the request is complete
-    // TODO: disalbe the camera, postscan (when bottomsheet is active)
-    let data = item // after doing stuff with this data
-
-  }
   
   if (device == null) return <View />
   return (
@@ -82,10 +81,25 @@ const HomeScreen = ({ navigation }) => {
 	index={0}
 	ref={bottomSheetRef}
         snapPoints={snapPoints}
-        onChange={handleSheetChanges}>
+        onChange={handleSheetChanges}
+      >
+	<View style={globalStyles.container}>
+	  
+	</View>
       </BottomSheet>
     </View>
   );
 }
 
 export default HomeScreen
+
+const styles = StyleSheet.create({
+  scanQRButtonStyle: {    
+    width: 150,
+    height: 150,
+    padding: 10,
+    
+    borderRadius: 100,
+    backgroundColor: '#eee',
+  },
+})

@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react'
+import {
+  useState,
+  useEffect,
+  useCallback
+} from 'react'
 import {
   Text,
   View,
@@ -6,18 +10,19 @@ import {
   StyleSheet,
 } from 'react-native';
 import { globalStyles } from '../styles/GlobalStyles'
-import { useCameraDevices, Camera } from 'react-native-vision-camera'
-import { useScanBarcodes, BarcodeFormat, Barcode } from 'vision-camera-code-scanner'
-
+import { useCameraDevices, Camera, useFrameProcessor } from 'react-native-vision-camera'
+import { scanBarcodes, BarcodeFormat, Barcode } from 'vision-camera-code-scanner'
+import { useIsFocused } from '@react-navigation/native'
+import { runOnJS } from 'react-native-reanimated';
 
 const HomeScreen = ({ navigation }) => {
-
+  const isFocused = useIsFocused()
+  
   const colorScheme = useColorScheme();
   const textTheme = colorScheme === 'light' ? globalStyles.lightThemeText : globalStyles.darkThemeText
   const containerTheme = colorScheme === 'light' ? globalStyles.lightContainer : globalStyles.darkContainer
 
   const [hasPermission, setHasPermission] = useState(false)
-  const [scanned, setScanned] = useState(false)
 
 
   useEffect(() => {
@@ -31,23 +36,17 @@ const HomeScreen = ({ navigation }) => {
   const devices = useCameraDevices()
   const device = devices.back
 
-  const [frameProcessor, qrcodeScanned] = useScanBarcodes([BarcodeFormat.QR_CODE], {
-    checkInverted: true,
-  });
+  const onQRCodeDetected = useCallback((qrCode : Barcode) => {
+    navigation.navigate("PostScan", qrCode)
+  }, [])
 
-
-  if(qrcodeScanned.length && !scanned)
-  {
-    const item = qrcodeScanned.pop()
-    console.log(item["displayValue"])
-
-    // checking with the API
-    // TODO: add smthn, like a "disable qrscan" until after the request is over? so it won't be spammed over and over again
-    // this disable qrscan will simply stop scanning any new qr codes, until the request is complete
-    setScanned(true)
-    let data = item // after doing stuff with this data
-    navigation.navigate("PostScan", data)
-  }
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet'
+    const qrCodes = scanBarcodes(frame, [BarcodeFormat.QR_CODE], { checkInverted: true });
+    if (qrCodes.length > 0) {
+      runOnJS(onQRCodeDetected)(qrCodes[0])
+    }
+  }, [onQRCodeDetected])
   
   if (device == null) return <View />
   return (
@@ -55,11 +54,10 @@ const HomeScreen = ({ navigation }) => {
     <Camera
       style={StyleSheet.absoluteFill}
       device={device}
-      isActive={true}
+      isActive={isFocused}
       frameProcessor={frameProcessor}
       frameProcessorFps={5}
     />
-    <Text style={globalStyles.lightThemeText}>I BUTTON</Text>
     </View>
   );
 }

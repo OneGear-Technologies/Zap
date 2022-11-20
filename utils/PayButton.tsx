@@ -12,14 +12,14 @@ import { globalStyles } from '../styles/GlobalStyles'
 const PayButton = ( props ) => {
   return (
     <TouchableOpacity
-      style={globalStyles.button}>
+      style={ globalStyles.button }>
       {/* onPress={ () => payAmount(5000, 30)} */}
-      <View style={{ flexDirection: 'row', paddingBottom: 10}}>
+      <View style={{ flexDirection: 'row', paddingTop: 30  }}>
 	<FontAwesomeIcon icon={ faClock  } size={ 26 } />
 	<Text style={ globalStyles.buttonText }> { props.time } min </Text>
       </View>
       
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', paddingTop: 10 }}>
 	<FontAwesomeIcon icon={ faInr  } size={ 26 }/>
 	<Text style={ globalStyles.buttonText }> { props.cost } </Text>
       </View>

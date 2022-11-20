@@ -5,30 +5,25 @@ import {
 export const globalStyles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    jusifyContents: 'center'
   },
 
   buttonText: {
     color: '#000000',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 17,
   },
   
   button: {
-    paddingTop: 25,
-    paddingLeft: 20,
+    alignItems: 'center',
     backgroundColor: '#00ff52',
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     borderColor: '#00e548',
     elevation: 7,
     borderWidth: 5,
     borderRadius: 20,
   },
 
-  text: {
-    
-  },
   
   lightContainer: {
     backgroundColor: '#d0d0c0',

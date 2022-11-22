@@ -4,7 +4,6 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import { globalStyles } from '../styles/GlobalStyles'
 import PayButton from '../utils/PayButton'
 
 const PostScan = ({ route, navigation }) => {
@@ -63,8 +62,8 @@ const PostScan = ({ route, navigation }) => {
       alignItems: 'center',
       justifyContent: 'space-evenly',
     }}>
-      <PayButton time={30} cost={50} />
-      <PayButton time={60} cost={80} />
+      <PayButton time={ 30 } cost={ 50 } />
+      <PayButton time={ 60 } cost={ 80 } />
     </View>
     </View>
   );

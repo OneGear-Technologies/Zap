@@ -1,8 +1,10 @@
-import React from 'react';
+import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native'
 import HomeScreen from './screens/HomeScreen'
 import PostScan from './screens/PostScan'
+import PostScanPaymentSuccess from './screens/PostScanPaymentSuccess'
+import { navigationRef } from './utils/RootNavigation';
 
 import {
   Text,
@@ -14,12 +16,13 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={ navigationRef }>
       <Stack.Navigator
 	screenOptions={{ headerShown: false }}
       >
 	<Stack.Screen name="Home" component={HomeScreen} />
 	<Stack.Screen name="PostScan" component={PostScan} />
+	<Stack.Screen name="PostScanPaymentSuccess" component={PostScanPaymentSuccess} />
     </Stack.Navigator>
     </NavigationContainer>
   )

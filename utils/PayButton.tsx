@@ -12,8 +12,8 @@ import { globalStyles } from '../styles/GlobalStyles'
 const PayButton = ( props ) => {
   return (
     <TouchableOpacity
-      style={ globalStyles.button }>
-      {/* onPress={ () => payAmount(5000, 30)} */}
+      style={ globalStyles.button }
+      onPress={ () => payAmount(props.cost * 100, props.time)}>
       <View style={{ flexDirection: 'row', paddingTop: 30  }}>
 	<FontAwesomeIcon icon={ faClock  } size={ 26 } />
 	<Text style={ globalStyles.buttonText }> { props.time } min </Text>

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import HomeScreen from './screens/HomeScreen'
 import PostScan from './screens/PostScan'
 import PostScanPaymentSuccess from './screens/PostScanPaymentSuccess'
+import PostScanPaymentFailure from './screens/PostScanPaymentFailure'
 import { navigationRef } from './utils/RootNavigation';
 
 import {
@@ -22,6 +23,7 @@ const App = () => {
       >
 	<Stack.Screen name="Home" component={HomeScreen} />
 	<Stack.Screen name="PostScan" component={PostScan} />
+	<Stack.Screen name="PostScanPaymentFailure" component={PostScanPaymentFailure} />
 	<Stack.Screen name="PostScanPaymentSuccess" component={PostScanPaymentSuccess} />
     </Stack.Navigator>
     </NavigationContainer>

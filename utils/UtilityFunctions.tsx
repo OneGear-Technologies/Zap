@@ -28,7 +28,6 @@ export function payAmount(amount: number, time: number) {
 		.catch(error => {
 		  // handle failure
 		  console.log(`Error: ${error.code} | ${error.description}`);
-		  // TODO: navigate to success screen
 		  RootNavigation.navigate(PostScanPaymentFailure)
 		});
 }

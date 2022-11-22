@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 import { globalStyles } from '../styles/GlobalStyles'
 
-const PostScanPaymentSuccess = () => {
+const PostScanPaymentFailure = () => {
   
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -24,7 +24,7 @@ const PostScanPaymentSuccess = () => {
 	position: 'absolute',
 	top: -50,
 	borderRadius: 50,
-	backgroundColor: "#00ff52",
+	backgroundColor: "#ff0000",
       }}/>
 
       <Text style=
@@ -40,7 +40,7 @@ const PostScanPaymentSuccess = () => {
       </Text>
       
       <Image
-	source={ require("../res/tickmark.png")}
+	source={ require("../res/cancelmark.png")}
 	style={{
 	  width: 150,
 	  height: 150,
@@ -56,4 +56,4 @@ const PostScanPaymentSuccess = () => {
 }
 
 
-export default PostScanPaymentSuccess
+export default PostScanPaymentFailure

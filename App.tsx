@@ -78,12 +78,18 @@ const App = () => {
 	  name="Account"
 	  component={Accounts}
 	  options={{
-	    headerShown : true,
-	    headerTitle: "Your Account",
+	    headerShown : false,
+	    unmountOnBlur : true,
 	    tabBarIcon: ({ color, size }) => (
 	      <FontAwesomeIcon icon={ faUserCircle  } size={ size } color={color}/>
 	    ),
 	  }}
+    listeners={({navigation}) => ({tabPress: (event) => {
+      event.preventDefault()
+      navigation.navigate('Account', {
+                       screen: 'Account' 
+                    });
+    }})}
 	/>
       </Tab.Navigator>
     </NavigationContainer>

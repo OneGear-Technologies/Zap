@@ -4,13 +4,15 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import { globalStyles } from '../styles/GlobalStyles'
+import DummyUserData from './global'
 
 const PostScanPaymentSuccess = () => {
   
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
+  console.log(DummyUserData.get_myNumber())
+  
   return (
     <View style={{
       flex: 1,

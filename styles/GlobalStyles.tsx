@@ -35,7 +35,14 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 20,
   },
 
+  textInputText : {
+    color: 'black',
+    fontSize: 18,
+    alignSelf: 'flex-start'
+  },
+
   textInputStyle: {
+    width: "98%",
     color: 'black',
     backgroundColor: "#efefef"
   },

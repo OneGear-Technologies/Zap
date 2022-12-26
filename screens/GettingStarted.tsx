@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
+import { Context } from '../utils/GlobalContext'
 import { globalStyles } from '../styles/GlobalStyles'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import * as RootNavigation from '../utils/RootNavigation';
-import { Context } from "../utils/GlobalContext"
+import * as RootNavigation from '../utils/RootNavigation'
 
 import {
   Text,
@@ -10,8 +10,8 @@ import {
   View,
   useWindowDimensions,
   TouchableOpacity,
-} from 'react-native';
-import AppUI from './AppUI';
+} from 'react-native'
+
 
 const Stack = createNativeStackNavigator()
 
@@ -20,7 +20,10 @@ const UserSignIn = () => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
+  const globalContext = useContext(Context)
+  const { isLoggedIn } = globalContext
 
+  
   function handleLogin () {
     console.log("Loggin' In")
     // TODO: Add some sort of state storage, like given https://stackoverflow.com/questions/39581115/how-to-keep-user-logged-in-aka-state-persistency-in-react-native
@@ -54,26 +57,15 @@ const UserSignIn = () => {
 	<View style={{
 	  flex: 1,
 	  paddingTop: 30,
+	  padding: 20,
 	  alignItems: 'center',
 	  flexDirection: 'column',
 	}}>
-	  <Text style={{
-	    paddingRight: windowWidth / 2 + 30,
-	    color: 'black',
-	    fontSize: 18,
-	  }}> Phone Number </Text>
-	  <TextInput style={{
-	    ...globalStyles.textInputStyle, width: 0.9 * windowWidth
-	  }}/>
+	  <Text style={ globalStyles.textInputText }> Phone Number </Text>
+	  <TextInput style={ globalStyles.textInputStyle }/>
 
-	  <Text style={{
-	    paddingRight: windowWidth / 2 + 70,
-	    color: 'black',
-	    fontSize: 18,
-	  }}> Password </Text>
-	  <TextInput style={{
-	    ...globalStyles.textInputStyle, width: 0.9 * windowWidth
-	  }}/>
+	  <Text style={ globalStyles.textInputText }> Password </Text>
+	  <TextInput style={ globalStyles.textInputStyle }/>
 	  
 	  <TouchableOpacity
 	    style= {{...globalStyles.buttonFilledWide, margin: 20}}
@@ -98,12 +90,10 @@ const UserRegistration = () => {
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  // TODO: Add some sort of state storage, like given https://stackoverflow.com/questions/39581115/how-to-keep-user-logged-in-aka-state-persistency-in-react-native
+    // TODO: Add some sort of state storage, like given https://stackoverflow.com/questions/39581115/how-to-keep-user-logged-in-aka-state-persistency-in-react-native
   function handleRegistration () {
     console.log("Registering In")
-         
   }
-
   
   return (
       <View style={{
@@ -131,35 +121,19 @@ const UserRegistration = () => {
 
 	<View style={{
 	  paddingTop: 30,
+	  padding: 20,
 	  alignItems: 'center',
 	  flexDirection: 'column',
 	}}>
-	  <Text style={{
-	    color: 'black',
-	    fontSize: 18,
-	    paddingRight: windowWidth / 2 + 70,
-	  }}> Full Name </Text>
-	  <TextInput style={{
-	    ...globalStyles.textInputStyle, width: 0.9 * windowWidth
-	  }}/>
 
-	  <Text style={{
-	    paddingRight: windowWidth / 2 + 30,
-	    color: 'black',
-	    fontSize: 18,
-	  }}> Phone Number </Text>
-	  <TextInput style={{
-	    ...globalStyles.textInputStyle, width: 0.9 * windowWidth
-	  }}/>
+	  <Text style={ globalStyles.textInputText }> Full Name </Text>
+	  <TextInput style={ globalStyles.textInputStyle }/>
 
-	  <Text style={{
-	    paddingRight: windowWidth / 2 + 70,
-	    color: 'black',
-	    fontSize: 18,
-	  }}> Password </Text>
-	  <TextInput style={{
-	    ...globalStyles.textInputStyle, width: 0.9 * windowWidth
-	  }}/>
+	  <Text style={ globalStyles.textInputText }> Phone Number </Text>
+	  <TextInput style={ globalStyles.textInputStyle }/>
+
+	  <Text style={ globalStyles.textInputText }> Password </Text>
+	  <TextInput style={ globalStyles.textInputStyle }/>
 	  
 	  <TouchableOpacity
 	    style= {{...globalStyles.buttonFilledWide, margin: 20}}

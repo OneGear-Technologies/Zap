@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react'
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import AppUI from './AppUI'
 import GettingStarted from './GettingStarted'
@@ -8,18 +9,12 @@ const MainStack = createNativeStackNavigator();
 
 const Navigator = () => {
   const globalContext = useContext(Context)
-  const { isLoggedIn, setIsLoggedIn, retrieveUserSession } = globalContext
+  const { isLoggedIn, retrieveUserSession } = globalContext
 
-  const [ userInfo, setUserInfo ] = useState(null)
-
-  useEffect(() => {
-    setUserInfo(retrieveUserSession())
-    if(userInfo !== null)
-      setIsLoggedIn(true)
-  }, [])
-
+  retrieveUserSession()
   
   return(
+    
     <MainStack.Navigator screenOptions={{ headerShown: false }}>
       {( !isLoggedIn )?
        <MainStack.Screen name="GettingStarted" component={GettingStarted} />

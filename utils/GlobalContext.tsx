@@ -46,10 +46,11 @@ const Provider = ( { children }) => {
         const session = await EncryptedStorage.getItem("user_session");
     
         if (session !== undefined && session !== null) {
-	  let userInfo : UserInfo= JSON.parse(session)
+	  let userInfo : UserInfo = JSON.parse(session)
 
+	  setIsLoggedIn(true)
+	  
 	  return userInfo
-
         }
     } catch (error) {
       console.log("Unable to store with error: " + error)

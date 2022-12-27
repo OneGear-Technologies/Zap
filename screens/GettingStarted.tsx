@@ -3,6 +3,7 @@ import { Context } from '../utils/GlobalContext'
 import { globalStyles } from '../styles/GlobalStyles'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import * as RootNavigation from '../utils/RootNavigation'
+import AppUI from './AppUI'
 
 import {
   Text,
@@ -11,6 +12,7 @@ import {
   useWindowDimensions,
   TouchableOpacity,
 } from 'react-native'
+import Accounts from './Accounts'
 
 
 const Stack = createNativeStackNavigator()
@@ -21,13 +23,48 @@ const UserSignIn = () => {
   const windowHeight = useWindowDimensions().height;
 
   const globalContext = useContext(Context)
-  const { isLoggedIn } = globalContext
-
+  const { setIsLoggedIn, domain, storeUserSession } = globalContext
+  const [ securePassword, setSecurePassword ] = useState(true)
+  const [ phoneNumber, setPhoneNumber ] = useState("")
+  const [ password, setPassword ] = useState("")
+  const [ error, setError ] = useState("")
   
   function handleLogin () {
     console.log("Loggin' In")
-    // TODO: Add some sort of state storage, like given https://stackoverflow.com/questions/39581115/how-to-keep-user-logged-in-aka-state-persistency-in-react-native
+    console.log(phoneNumber)
+    console.log(password)
+    // TODO: Validity and Error detection
+
+    let body = JSON.stringify({
+      'username' : phoneNumber,
+      'password' : password
+    })
     
+    fetch(`${domain}/api/login/`, {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json',
+      },
+      body: body
+    }).then(res => {
+      if(res.ok) {
+	return res.json()
+      } else {
+	setError("Invalid Credentials, Please try again.")
+	throw res.json()
+      }
+    }).then(json => {
+      console.log(json)
+      console.log("LOGGGED IN")
+
+      storeUserSession(json.access, json.refresh, "123456789", "John", "Doe")
+      setIsLoggedIn(true)
+      RootNavigation.navigate_params(AppUI, { screen: 'Account' })
+
+    }).catch(error => {
+      console.log(error)
+    })
+   
   }
     
   return (
@@ -61,11 +98,21 @@ const UserSignIn = () => {
 	  alignItems: 'center',
 	  flexDirection: 'column',
 	}}>
+
 	  <Text style={ globalStyles.textInputText }> Phone Number </Text>
-	  <TextInput style={ globalStyles.textInputStyle }/>
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ phoneNumber }
+		     onChangeText={ text => setPhoneNumber(text) }
+		     keyboardType={"phone-pad"} />
 
 	  <Text style={ globalStyles.textInputText }> Password </Text>
-	  <TextInput style={ globalStyles.textInputStyle }/>
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ password }
+		     onChangeText= { text => setPassword(text) }
+		     secureTextEntry={ securePassword }
+	  />
+
+	  <Text style={{ paddingTop: 20, color: 'red', size: 15 }}>{error}</Text>
 	  
 	  <TouchableOpacity
 	    style= {{...globalStyles.buttonFilledWide, margin: 20}}
@@ -87,12 +134,77 @@ const UserSignIn = () => {
 // TODO: Skipping these parts must be done in App.tsx, last step
 const UserRegistration = () => {
   
+  const globalContext = useContext(Context)
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-    // TODO: Add some sort of state storage, like given https://stackoverflow.com/questions/39581115/how-to-keep-user-logged-in-aka-state-persistency-in-react-native
+  const { setIsLoggedIn, domain, storeUserSession } = globalContext
+  const [ securePassword, setSecurePassword ] = useState(true)
+  const [ phoneNumber, setPhoneNumber ] = useState("")
+  const [ password, setPassword ] = useState("")
+  const [ firstName, setFirstName ] = useState("")
+  const [ lastName, setLastName ] = useState("")
+  const [ passowrdError, setPasswordError ] = useState("")
+  const [ phoneError, setPhoneError] = useState("")
+  const [ lastNameError, setLastNameError] = useState("")
+  const [ firstNameError, setFirstNameError] = useState("")
+  
   function handleRegistration () {
     console.log("Registering In")
+
+    let body = JSON.stringify({
+      'username' : phoneNumber,
+      'password' : password,
+      'email' : "",
+      first_name: firstName,
+      last_name: lastName,
+    })
+
+    var resp;
+    
+    fetch(`${domain}/api/register/`, {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json',
+      },
+      body: body
+    }).then(res => {
+      resp = res
+      return res.json()
+    }).then(json => {
+      if(resp.ok)
+      {
+	console.log(json)
+	console.log("REGISTRATION")
+
+	storeUserSession(json.access, json.refresh, json.username, json.first_name, json.last_name)
+	setIsLoggedIn(true)
+	
+	RootNavigation.navigate_params(AppUI, { screen: 'Accounts' })
+      } else {
+	console.log("Failed!: ")
+	Object.keys(json).forEach(key => {
+	  switch(key)
+	  {
+	    case "password":
+	    setPasswordError(json[key][0])
+	    break;
+
+	    case "username":
+	    setPhoneError(json[key][0])
+	    break;
+
+	    case "first_name":
+	    setLastNameError(json[key][0])
+	    break;
+
+	    case "last_name":
+	    setFirstNameError(json[key][0])
+	    break;
+	  }
+	})
+      }
+    })
   }
   
   return (
@@ -120,28 +232,52 @@ const UserRegistration = () => {
 	</Text>
 
 	<View style={{
-	  paddingTop: 30,
 	  padding: 20,
+	  paddingTop: 0,
 	  alignItems: 'center',
 	  flexDirection: 'column',
 	}}>
 
-	  <Text style={ globalStyles.textInputText }> Full Name </Text>
-	  <TextInput style={ globalStyles.textInputStyle }/>
+	  <Text style={ globalStyles.textInputText }> First Name </Text>
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ firstName }
+		     onChangeText={ text => setFirstName(text) }
+	  />
+	  <Text style={{ color: 'red', size: 10 }}>{firstNameError}</Text>
 
+
+	  <Text style={ globalStyles.textInputText }> Last Name </Text>
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ lastName }
+		     onChangeText={ text => setLastName(text) }
+	  />
+	  <Text style={{ color: 'red', size: 10 }}>{lastNameError}</Text>
+	  
+	  
 	  <Text style={ globalStyles.textInputText }> Phone Number </Text>
-	  <TextInput style={ globalStyles.textInputStyle }/>
-
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ phoneNumber }
+		     onChangeText={ text => setPhoneNumber(text) }
+		     keyboardType={ "phone-pad" }
+	  />
+	  <Text style={{ color: 'red', size: 10 }}>{phoneError}</Text>
+	  
+	  
 	  <Text style={ globalStyles.textInputText }> Password </Text>
-	  <TextInput style={ globalStyles.textInputStyle }/>
+	  <TextInput style={ globalStyles.textInputStyle }
+		     value={ password }
+		     onChangeText= { text => setPassword(text) }
+		     secureTextEntry={ securePassword }
+	  />
+	  <Text style={{ color: 'red', size: 10 }}>{passowrdError}</Text>
 	  
 	  <TouchableOpacity
-	    style= {{...globalStyles.buttonFilledWide, margin: 20}}
+	    style= {{...globalStyles.buttonFilledWide, margin: 5}}
 	    onPress={() => {handleRegistration()}}
 	  >
 	    <Text style={{
 	      color: 'black',
-	      fontSize: 23,
+	      fontSize: 20,
 	      fontWeight: 'bold'
 	    }}> Create Account </Text>
 	  </TouchableOpacity>
@@ -162,9 +298,6 @@ const UserRegistration = () => {
   )
 }
 
-
-// TODO: Link up Create Account with the API
-// TODO: Link up Sing In with the the API
 
 function GettingStarted() {
   return (

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native'
 import AppUI from './screens/AppUI'
@@ -16,12 +16,17 @@ const MainStack = createNativeStackNavigator();
 
 
 const App = () => {
+
+  const globalContext = useContext(Context)
+  const { isLoggedIn } = globalContext
+  console.log(isLoggedIn)
+  
   return (
     <Provider>
       <NavigationContainer ref={ navigationRef }>
 	<MainStack.Navigator screenOptions={{ headerShown: false }}>
-	  <MainStack.Screen name="GettingStarted" component={GettingStarted} />
-	  <MainStack.Screen name="AppUI" component={AppUI} />
+	   <MainStack.Screen name="GettingStarted" component={GettingStarted} />
+	   <MainStack.Screen name="AppUI" component={AppUI} />
 	</MainStack.Navigator>
       </NavigationContainer>
     </Provider>

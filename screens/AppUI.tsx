@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faQrcode } from '@fortawesome/free-solid-svg-icons/faQrcode'
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons/faUserCircle'
 
-
 const Tab = createBottomTabNavigator();
 
 const AppUI = () => {
+
   return (
         <Tab.Navigator
 	initialRouteName="Scan"

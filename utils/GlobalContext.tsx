@@ -8,10 +8,19 @@ import EncryptedStorage from 'react-native-encrypted-storage';
 
 const Context = createContext({})
 
+export interface UserInfo {
+    access_token: string,
+    refresh_token: string,
+    username: string,
+    first_name: string,
+    last_name: string
+}
+
+
 const Provider = ( { children }) => {
   const [ domain, setDomain ] = useState("http://100.115.79.115:8000") // TODO: update this after deployment
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
-
+  
   async function storeUserSession(access_token : string, refresh_token: string, username : string, first_name : string, last_name: string) {
     try {
         await EncryptedStorage.setItem(
@@ -31,12 +40,16 @@ const Provider = ( { children }) => {
     }
   }
 
-  async function retrieveUserSession() { // call this in entrypoint?
+
+  async function retrieveUserSession() {
     try {    
         const session = await EncryptedStorage.getItem("user_session");
     
-        if (session !== undefined) {
-	  // TODO: set firstname, username, etc here?
+        if (session !== undefined && session !== null) {
+	  let userInfo : UserInfo= JSON.parse(session)
+
+	  return userInfo
+
         }
     } catch (error) {
       console.log("Unable to store with error: " + error)

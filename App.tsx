@@ -1,10 +1,8 @@
-import React, { useContext } from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
-import AppUI from './screens/AppUI'
-import GettingStarted from './screens/GettingStarted'
 import { navigationRef } from './utils/RootNavigation'
-import { Context, Provider } from './utils/GlobalContext'
+import { Provider } from './utils/GlobalContext'
+import Navigator from './screens/Navigator'
 
 import {
   Text,
@@ -12,22 +10,12 @@ import {
   useColorScheme,
 } from 'react-native';
 
-const MainStack = createNativeStackNavigator();
 
-
-const App = () => {
-
-  const globalContext = useContext(Context)
-  const { isLoggedIn } = globalContext
-  console.log(isLoggedIn)
-  
+const App = () => { 
   return (
     <Provider>
       <NavigationContainer ref={ navigationRef }>
-	<MainStack.Navigator screenOptions={{ headerShown: false }}>
-	   <MainStack.Screen name="GettingStarted" component={GettingStarted} />
-	   <MainStack.Screen name="AppUI" component={AppUI} />
-	</MainStack.Navigator>
+	<Navigator />
       </NavigationContainer>
     </Provider>
   )

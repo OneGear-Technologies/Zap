@@ -37,7 +37,8 @@ const UserSignIn = () => {
 
     let body = JSON.stringify({
       'username' : phoneNumber,
-      'password' : password
+      'password' : password,
+      'email' : ""
     })
     
     fetch(`${domain}/api/login/`, {
@@ -142,8 +143,8 @@ const UserRegistration = () => {
   const [ securePassword, setSecurePassword ] = useState(true)
   const [ phoneNumber, setPhoneNumber ] = useState("")
   const [ password, setPassword ] = useState("")
-  const [ firstName, setFirstName ] = useState("")
-  const [ lastName, setLastName ] = useState("")
+  const [ firstName, setFirstName ] = useState(null)
+  const [ lastName, setLastName ] = useState(null)
   const [ passowrdError, setPasswordError ] = useState("")
   const [ phoneError, setPhoneError] = useState("")
   const [ lastNameError, setLastNameError] = useState("")
@@ -195,11 +196,11 @@ const UserRegistration = () => {
 	    break;
 
 	    case "first_name":
-	    setLastNameError(json[key][0])
+	    setLastNameError("This field is required")
 	    break;
 
 	    case "last_name":
-	    setFirstNameError(json[key][0])
+	    setFirstNameError("This field is required")
 	    break;
 	  }
 	})

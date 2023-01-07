@@ -20,6 +20,8 @@ export interface UserInfo {
 const Provider = ( { children }) => {
   const [ domain, setDomain ] = useState("http://100.115.79.115:8000") // TODO: update this after deployment
   const [ isLoggedIn, setIsLoggedIn ] = useState(false)
+  const [ uid, setUID ] = useState("")
+  const [ name, setName ] = useState("")
   
   async function storeUserSession(access_token : string, refresh_token: string, username : string, first_name : string, last_name: string) {
     try {
@@ -33,6 +35,9 @@ const Provider = ( { children }) => {
 	      last_name : last_name
             })
         );
+
+      setName(first_name + " " + last_name)
+      setUID(username)
       console.log("Successfuly stored")
 
     } catch (error) {
@@ -49,6 +54,8 @@ const Provider = ( { children }) => {
 	  let userInfo : UserInfo = JSON.parse(session)
 
 	  setIsLoggedIn(true)
+	  setUID(userInfo.username)
+	  setName(userInfo.first_name + " " + userInfo.last_name)
 	  
 	  return userInfo
         }
@@ -62,7 +69,9 @@ const Provider = ( { children }) => {
     isLoggedIn,
     setIsLoggedIn,
     storeUserSession,
-    retrieveUserSession
+    retrieveUserSession,
+    uid,
+    name,
   }
 
   return <Context.Provider value={globalContext}>{children}</Context.Provider>

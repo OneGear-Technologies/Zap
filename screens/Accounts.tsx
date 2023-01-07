@@ -1,9 +1,9 @@
-import React from 'react'
-import DummyUserData from './global'
+import React, { useContext, useState } from 'react'
 import { globalStyles } from '../styles/GlobalStyles'
 import { payAmount } from '../utils/UtilityFunctions'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faInr } from '@fortawesome/free-solid-svg-icons/faInr'
+import { Context, UserInfo } from '../utils/GlobalContext'
 
 import {
   Text,
@@ -13,10 +13,42 @@ import {
 } from 'react-native';
 
 const Accounts = () => {
-
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
-  console.log(DummyUserData.get_myNumber())
+
+  const globalContext = useContext(Context)
+  const { domain, retrieveUserSession, uid, name } = globalContext
+  const [amount, setAmount] = useState(0)
+  
+  retrieveUserSession()
+  console.log(uid)
+  console.log(name)
+
+  
+  let body = JSON.stringify({
+    'uid' : uid
+  })
+    
+  fetch(`${domain}/get-uid/`, {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json',
+      },
+      body: body
+    }).then(res => {
+      if(res.ok) {
+	return res.json()
+      } else {
+	console.log("CRITICAL ERROR: Unable to get wallet data")
+	throw res.json()
+      }
+    }).then(json => {
+      setAmount(json.amount)
+      console.log(amount)
+      
+    }).catch(error => {
+      console.log(error)
+    })
   
   return (
     
@@ -43,7 +75,7 @@ const Accounts = () => {
 	  </Text>
 	
 	  <Text style={{ color: '#000000', fontSize: 30, fontWeight: 'bold' }}>
-	    { DummyUserData.get_myName() }
+	    { name }
 	  </Text>
 
 	  <Text style={{ color: '#000000', fontSize: 13 }}>
@@ -51,7 +83,7 @@ const Accounts = () => {
 	  </Text>
 	  
 	  <Text style={{ color: '#000000', fontSize: 60, fontWeight: 'bold' }}>
-	    ₹ { DummyUserData.get_myNumber() }
+	    ₹ { amount }
 	  </Text>
 
 	  

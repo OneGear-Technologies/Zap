@@ -41,7 +41,7 @@ const UserSignIn = () => {
       'email' : ""
     })
     
-    fetch(`${domain}/api/login/`, {
+    fetch(`${domain}/`, {
       method: 'POST',
       headers: {
 	'Content-Type': 'application/json',
@@ -56,16 +56,13 @@ const UserSignIn = () => {
       }
     }).then(json => {
       console.log(json)
-      console.log("LOGGGED IN")
+      storeUserSession(json.access, json.refresh, phoneNumber, "John", "Doe")
 
-      storeUserSession(json.access, json.refresh, "123456789", "John", "Doe")
       setIsLoggedIn(true)
-      RootNavigation.navigate_params(AppUI, { screen: 'Account' })
-
+      RootNavigation.navigate_params(AppUI, { screen: 'Account' })      
     }).catch(error => {
       console.log(error)
     })
-   
   }
     
   return (
@@ -132,7 +129,7 @@ const UserSignIn = () => {
   )
 }
 
-// TODO: Skipping these parts must be done in App.tsx, last step
+
 const UserRegistration = () => {
   
   const globalContext = useContext(Context)
@@ -163,7 +160,7 @@ const UserRegistration = () => {
 
     var resp;
     
-    fetch(`${domain}/api/register/`, {
+    fetch(`${domain}/register/`, {
       method: 'POST',
       headers: {
 	'Content-Type': 'application/json',
@@ -179,9 +176,9 @@ const UserRegistration = () => {
 	console.log("REGISTRATION")
 
 	storeUserSession(json.access, json.refresh, json.username, json.first_name, json.last_name)
-	setIsLoggedIn(true)
 	
-	RootNavigation.navigate_params(AppUI, { screen: 'Accounts' })
+	setIsLoggedIn(true)
+	RootNavigation.navigate_params(AppUI, { screen: 'Account' })
       } else {
 	console.log("Failed!: ")
 	Object.keys(json).forEach(key => {

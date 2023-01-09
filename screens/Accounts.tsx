@@ -49,6 +49,8 @@ const Accounts = () => {
     }).catch(error => {
       console.log(error)
     })
+
+  retrieveUserSession() // okay this fixes it. Works!
   
   return (
     
@@ -94,7 +96,7 @@ const Accounts = () => {
       }}>
 	<TouchableOpacity
 	  style={globalStyles.button}
-	  onPress={() => payAmount(5000)}>
+	  onPress={() => payAmount(5000, globalContext)}>
   
 	  <View style={{ flexDirection: 'row', paddingTop: 10 }}>
 	    <Text style={{ color: 'black' }}> Recharge wallet with </Text>

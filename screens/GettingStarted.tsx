@@ -28,6 +28,9 @@ const UserSignIn = () => {
   const [ phoneNumber, setPhoneNumber ] = useState("")
   const [ password, setPassword ] = useState("")
   const [ error, setError ] = useState("")
+  const [ access, setAccess ] = useState("")
+  const [ refresh, setRefresh ] = useState("")
+
   
   function handleLogin () {
     console.log("Loggin' In")
@@ -56,10 +59,37 @@ const UserSignIn = () => {
       }
     }).then(json => {
       console.log(json)
-      storeUserSession(json.access, json.refresh, phoneNumber, "John", "Doe")
+      setAccess(json.access)
+      setRefresh(json.refresh)
 
-      setIsLoggedIn(true)
-      RootNavigation.navigate_params(AppUI, { screen: 'Account' })      
+      body = JSON.stringify({
+	'uid' : phoneNumber,
+      })
+
+      fetch(`${domain}/get-name`, {
+	method: 'POST',
+	headers: {
+	  'Content-Type': 'application/json',
+	},
+	body: body
+      }).then(res => {
+	if(res.ok) {
+	  return res.json()
+	} else {
+	      setError("Invalid Credentials, Please try again.")
+	  throw res.json()
+	}
+      }).then(json => {
+	console.log(json)
+	storeUserSession(access, refresh, phoneNumber, json.first_name, json.last_name)
+
+	setIsLoggedIn(true)
+	RootNavigation.navigate_params(AppUI, { screen: 'Account' })      
+      }).catch(error => {
+	console.log(error)
+      })
+      
+      
     }).catch(error => {
       console.log(error)
     })

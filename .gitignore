@@ -64,4 +64,5 @@ buck-out/
 /vendor/bundle/
 
 *.org
+!README.org
 *.log

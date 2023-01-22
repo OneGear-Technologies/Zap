@@ -1,0 +1,39 @@
+#+TITLE: Zap
+
+This is the app for scanning and paying for charging.
+
+* Getting Started
+APKs can be found under Releases.
+
+For the source code, follow these instructions:
+Make sure you have the environment setup correctly as described [[https://reactnative.dev/docs/environment-setup][here]], and have install git and it's dependencies.
+READ THE DOCUMENT CAREFULLY AND FOLLOW ALL STEPS. It is very thorough, and you should have not much of an issue setting this all up.
+
+#+BEGIN_SRC
+git clone https://github.com/OneGear-Technologies/Zap
+cd Zap
+npx react-native start
+npx react-native run-android # or 
+#+END_SRC
+
+
+Start developing!
+
+* Running and Deployment
+** Backend Server
+This requires the [[https://github.com/OneGear-Technologies/improved-computing-machine/tree/main][backend]] up and running. Make sure that you can access the backend. I personally used [[https://tailscale.com/][Tailscale]] for creating a private VPN to test all this out without having to deploy the backend on a server. I did that only for development.
+
+If you go the route of deploying on a server, the domain ip address in the file GlobalContext.tsx must be modified. This is the case for production deployment as well.
+
+** Payment Gateway
+The current app uses a demo account key, this has to be replaced with a key tied to the business account. Read up on the [[https://razorpay.com/docs/payments/payment-gateway/react-native-integration/standard/#list-of-razorpay-react-native-sdk-versions-last][RazorPay Documentation]] to be familiar with what the app uses as it's
+
+Adding a few more utilities related to customer security, like handling the invoicing in house, is something that should be looked into for a production deployment
+
+** Configurable Time for Charging
+Check out the [[https://github.com/OneGear-Technologies/Zap/tree/paymentWithTimer][paymentWithTimer]] branch for more information. In that, there is a user controlled sample of what it would look like. In the main branch, the time is hard-coded and can be configured using that code and the backend code as a reference.
+
+
+* Bugs
+Open issue describing the problem faced and other suitable details.
+

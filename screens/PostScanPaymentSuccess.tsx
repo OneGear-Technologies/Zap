@@ -4,14 +4,26 @@ import {
   Image,
   useWindowDimensions,
 } from 'react-native';
-import DummyUserData from './global'
+import { useEffect } from 'react';
+import { BackHandler } from "react-native";
+import * as RootNavigation from '../utils/RootNavigation'
+
+function handleBackButtonClick() {
+  RootNavigation.navigate("QRScan")
+  return true;
+}
 
 const PostScanPaymentSuccess = () => {
   
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  console.log(DummyUserData.get_myNumber())
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBackButtonClick);
+    return () => {
+    BackHandler.removeEventListener("hardwareBackPress", handleBackButtonClick);
+    };
+  }, []);
   
   return (
     <View style={{

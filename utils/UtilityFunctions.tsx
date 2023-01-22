@@ -2,12 +2,16 @@ import RazorpayCheckout from 'react-native-razorpay';
 import PostScanPaymentSuccess from '../screens/PostScanPaymentSuccess';
 import PostScanPaymentFailure from '../screens/PostScanPaymentFailure';
 import Accounts from '../screens/Accounts';
-import DummyUserData from '../screens/global'
-
 import * as RootNavigation from '../utils/RootNavigation';
 
 
-export function payAmount(amount: number) {
+export function payAmount(amount: number, globalContext) { // in paisa
+  const { domain, uid } = globalContext
+
+  let body = JSON.stringify({
+    'uid' : uid,
+    'amount' : (amount/100)
+  })
   
   let desc = "Top up OGT wallet with " + amount;
   var options = {
@@ -23,8 +27,27 @@ export function payAmount(amount: number) {
 		  .then(data => {
 		    // handle success
 		    console.log(`Success: ${data.razorpay_payment_id}`);
-		    DummyUserData.set_myNumber(DummyUserData.get_myNumber() + (amount / 100))
-		    console.log(DummyUserData.get_myNumber())
+
+			  fetch(`${domain}/update-uid/`, {
+				  method: 'POST',
+				  headers: {
+					  'Content-Type': 'application/json',
+				  },
+				  body: body
+			  }).then(res => {
+				  if (res.ok) {
+					  return res.json()
+				  } else {
+					  console.log("CRITICAL ERROR: Unable to get wallet data")
+					  throw res.json()
+				  }
+			  }).then(json => {
+				  console.log(json.amount)
+			  }).catch(error => {
+				  console.log(error)
+			  })
+		    
+		    
 		    // TODO: navigate to success screen
 		    RootNavigation.navigate("Account", { screen: Accounts })
 		    
@@ -36,8 +59,33 @@ export function payAmount(amount: number) {
 		});
 }
 
-export function payAmountWallet(amount: number) {
-  DummyUserData.set_myNumber(DummyUserData.get_myNumber() - amount) // TODO: add error checking and API here
+export function payAmountWallet(amount: number, globalContext) { // in rupees
+  const { domain, uid } = globalContext
+
+  let body = JSON.stringify({
+    'uid' : uid,
+    'amount' : (-1 * amount)
+  })
+
+  fetch(`${domain}/update-uid/`, {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json',
+      },
+      body: body
+    }).then(res => {
+      if(res.ok) {
+	return res.json()
+      } else {
+	console.log("CRITICAL ERROR: Unable to get wallet data")
+	throw res.json()
+      }
+    }).then(json => {
+      console.log(json.amount)
+      
+    }).catch(error => {
+      console.log(error)
+    })  
+  
   RootNavigation.navigate(PostScanPaymentSuccess)
-		
 }

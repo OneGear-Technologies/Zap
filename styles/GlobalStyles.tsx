@@ -24,6 +24,17 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 20,
   },
 
+  button2: {
+    alignItems: 'center',
+    backgroundColor: '#00ff52',
+    borderColor: '#00e548',
+    padding: 10,
+    elevation: 7,
+    borderWidth: 5,
+    borderRadius: 20,
+  },
+
+
   buttonHollowWide: {
     alignItems: 'center',
     backgroundColor: '#ffffff',

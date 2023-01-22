@@ -88,5 +88,4 @@ export function payAmountWallet(amount: number, globalContext) { // in rupees
     })  
   
   RootNavigation.navigate(PostScanPaymentSuccess)
-		
 }

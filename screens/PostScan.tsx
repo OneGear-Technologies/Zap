@@ -11,53 +11,99 @@ import { globalStyles } from '../styles/GlobalStyles'
 import { useContext, useState, useEffect } from 'react'
 import { payAmountWallet } from '../utils/UtilityFunctions';
 import { Context, UserInfo } from '../utils/GlobalContext'
+import * as RootNavigation from '../utils/RootNavigation'
 
-const PostScan = ({ route, navigation }) => {
-  const [time, setTime] = useState(0)
-  const [ finalTime, setFinalTime ] = useState(0)
-  const [timing, setStatus] = useState(false)
-
+const PostScan = ({ route, navigation : { goBack} }) => {
+  const [time, setTime] = useState(60) // this is the variable you'll utilize to stop charging when the bike is fully charged
+  const [chargeCompleted, setChargeCompleted] = useState(false)
+  const [ initial, setInitial ] = useState(true)
   const globalContext = useContext(Context)
+  const { domain, retrieveUserSession, uid } = globalContext
 
-  const reset=()=>{
-    setTime(0);
-  }
+  retrieveUserSession()
+  
+  let cid = route.params.rawValue
+        
+  let body = JSON.stringify({
+    'uid' : uid,
+    'cid' : cid
+  })
+  
+  useEffect(() => {
+    if(initial) {
+      fetch(`${domain}/charge/get-stat/`, {
+	method: 'POST',
+	headers: {
+	  'Content-Type': 'application/json',
+	},
+	body: body
+      }).then(res => {
+	if(res.ok) {
+	  return res.json()
+	} else {
+	  console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
+	  throw res.json()
+	}
+      }).then(json => {
+	if(json.charge_stat)
+	{
+	  console.log("Already in use, try later")
+	  RootNavigation.navigate("QRScan")
+
+	}
+      }).catch(error => {
+	console.log(error)
+      })
+      
+      setInitial(false)
+
+    } else {
+      console.log("Unlocking!")
+      fetch(`${domain}/charge/lock/`, {
+	method: 'POST',
+	headers: {
+	  'Content-Type': 'application/json',
+	},
+	body: body
+      }).then(res => {
+	if (res.ok) {
+	  return res.json()
+	} else {
+	  console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
+	  throw res.json()
+	}
+      }).then(json => {
+	console.log("Locked.")
+	setChargeCompleted(false)
+      }).catch(error => {
+	console.log(error)
+      })
+    }
+  }, [initial])
 
   useEffect(() => {
-    let timer;
-    if (timing) {
-      timer = setInterval(() => {
-	setTime((time) => time + 1);
-      }, 1000)
-    } else {
-      clearInterval(timer)
-      setFinalTime(time)
-     
-      
-      console.log(time)
-      
-      if (!timing)
-	{
-	  reset(); // do the caluclation and paypment part here
-	}
+    if(time <= 0) {
+      setChargeCompleted(true)
     }
 
+  }, [time])
+  
+  useEffect(() => {
+    let timer;
+    if (!chargeCompleted) {
+      timer = setInterval(() => {
+	setTime((time) => time - 1);
+
+      }, 1000)
+    } else {
+      setTime(0)
+      console.log(cid, uid)
+    }
     return () => { clearInterval(timer) }
-  }, [timing])
-
-  const handleStart = () => {
-    setFinalTime(0)
-    setStatus(true);
-  }
-
-  const handleStop = () => {
-    setStatus(false);
-  }
-  
-  // TODO: implement the API calls, and the payment calls. Make sure to call this only once! As setting values with SetInterval will force a re-render
-  //console.log(route.params.rawValue)
+  }, [chargeCompleted])
 
   
+
   return (
     <View style={{
       flex: 1,
@@ -104,42 +150,24 @@ const PostScan = ({ route, navigation }) => {
       alignItems: 'center',
       justifyContent: 'space-evenly',
     }}>
-      <TouchableOpacity
-	disabled={ timing }
-	style={ globalStyles.button2 }
-	onPress={ () => handleStart() }>
-	<View style={{ flexDirection: 'row' }}>
-	  <Text style={ globalStyles.buttonText }> Start Charging </Text>
-	</View>
 
-      </TouchableOpacity>
-
-
-      <TouchableOpacity
-	disabled={ !timing }
-	style={ globalStyles.button2 }
-	onPress={ () => handleStop() }>
-	<View style={{ flexDirection: 'row' }}>
-	  <Text style={ globalStyles.buttonText }> Stop Charging </Text>
-	</View>
-
-      </TouchableOpacity>
       
       <TouchableOpacity
 	style={ globalStyles.button }
-	onPress={() => payAmountWallet(finalTime * 2, globalContext) }>
+	disabled={ !chargeCompleted }
+	onPress={() => payAmountWallet(120, globalContext) }>
 	<View style={{ flexDirection: 'row', paddingTop: 20  }}>
 	  <FontAwesomeIcon icon={ faClock  } size={ 26 } />
 	</View>
 
 	<View style={{ flexDirection: 'row'  }}>
-	  <Text style={ globalStyles.buttonText }> Elapsed: </Text>
-	  <Text style={ globalStyles.buttonText }> { finalTime }s </Text>
+	  <Text style={ globalStyles.buttonText }> Time Left: </Text>
+	  <Text style={ globalStyles.buttonText }> { time }s </Text>
 	</View>
 
 	<View style={{ flexDirection: 'row', paddingTop: 10 }}>
 	  <FontAwesomeIcon icon={ faInr  } size={ 26 }/>
-	  <Text style={ globalStyles.buttonText }> { finalTime * 2 }</Text>
+	  <Text style={ globalStyles.buttonText }> { 120  }</Text>
 	</View>
       </TouchableOpacity>
 

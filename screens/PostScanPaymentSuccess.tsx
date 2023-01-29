@@ -9,7 +9,7 @@ import { BackHandler } from "react-native";
 import * as RootNavigation from '../utils/RootNavigation'
 
 function handleBackButtonClick() {
-  RootNavigation.navigate("QRScan")
+  RootNavigation.navigate_params("PostScan", true)
   return true;
 }
 

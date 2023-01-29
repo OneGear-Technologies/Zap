@@ -12,74 +12,83 @@ import { useContext, useState, useEffect } from 'react'
 import { payAmountWallet } from '../utils/UtilityFunctions';
 import { Context, UserInfo } from '../utils/GlobalContext'
 import * as RootNavigation from '../utils/RootNavigation'
+import React from 'react';
 
-const PostScan = ({ route, navigation : { goBack} }) => {
+const PostScan = ({ route, navigation : { goBack} }, ) => {
   const [time, setTime] = useState(60) // this is the variable you'll utilize to stop charging when the bike is fully charged
+  const globalContext = useContext(Context)
   const [chargeCompleted, setChargeCompleted] = useState(false)
   const [ initial, setInitial ] = useState(true)
-  const globalContext = useContext(Context)
   const { domain, retrieveUserSession, uid } = globalContext
-
+  global.startCharging = false  
   retrieveUserSession()
-  
-  let cid = route.params.rawValue
-        
+
+  if(typeof(route.params) == 'boolean')
+  {
+    global.startCharging = true
+  } else {
+    global.cid = route.params.rawValue    
+  }
+    
   let body = JSON.stringify({
     'uid' : uid,
-    'cid' : cid
+    'cid' : global.cid
   })
-  
+    
   useEffect(() => {
+    console.log("Check if in use.")
     if(initial) {
-      fetch(`${domain}/charge/get-stat/`, {
-	method: 'POST',
-	headers: {
-	  'Content-Type': 'application/json',
-	},
-	body: body
-      }).then(res => {
-	if(res.ok) {
-	  return res.json()
-	} else {
-	  console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
-	  throw res.json()
-	}
-      }).then(json => {
-	if(json.charge_stat)
-	{
-	  console.log("Already in use, try later")
-	  RootNavigation.navigate("QRScan")
-
-	}
-      }).catch(error => {
-	console.log(error)
-      })
+	fetch(`${domain}/charge/get-stat/`, {
+	  method: 'POST',
+	  headers: {
+	    'Content-Type': 'application/json',
+	  },
+	  body: body
+	}).then(res => {
+	  if(res.ok) {
+	    return res.json()
+	  } else {
+	    console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
+	    throw res.json()
+	  }
+	}).then(json => {
+	  if(json.charge_stat)
+	  {
+	    console.log("Already in use, try later")
+	    RootNavigation.navigate("QRScan")
+	    
+	  }
+	}).catch(error => {
+	  console.log(error)
+	})
       
-      setInitial(false)
+	setInitial(false)
+	
+      } 
 
-    } else {
+    if(global.startCharging) {
       console.log("Unlocking!")
-      fetch(`${domain}/charge/lock/`, {
-	method: 'POST',
-	headers: {
-	  'Content-Type': 'application/json',
-	},
-	body: body
-      }).then(res => {
-	if (res.ok) {
-	  return res.json()
-	} else {
-	  console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
-	  throw res.json()
-	}
-      }).then(json => {
-	console.log("Locked.")
-	setChargeCompleted(false)
-      }).catch(error => {
-	console.log(error)
-      })
+	fetch(`${domain}/charge/lock/`, {
+	  method: 'POST',
+	  headers: {
+	    'Content-Type': 'application/json',
+	  },
+	  body: body
+	}).then(res => {
+	  if (res.ok) {
+	    return res.json()
+	  } else {
+	    console.log("CRITICAL ERROR: Unable to lock! Contact support ASAP.")
+	    throw res.json()
+	  }
+	}).then(json => {
+	  console.log("Locked.")
+	  setChargeCompleted(false)
+	}).catch(error => {
+	  console.log(error)
+	})
     }
-  }, [initial])
+  }, [initial, global.startCharging])
 
   useEffect(() => {
     if(time <= 0) {
@@ -89,20 +98,25 @@ const PostScan = ({ route, navigation : { goBack} }) => {
   }, [time])
   
   useEffect(() => {
-    let timer;
-    if (!chargeCompleted) {
-      timer = setInterval(() => {
-	setTime((time) => time - 1);
+    if(global.startCharging) {
+      let timer;
+      if(!initial) {
+	if (!chargeCompleted) {
+	  timer = setInterval(() => {
+	    setTime((time) => time - 1);
 
-      }, 1000)
-    } else {
-      setTime(0)
-      console.log(cid, uid)
-    }
-    return () => { clearInterval(timer) }
-  }, [chargeCompleted])
+	  }, 1000)
+	} else {
+	  setTime(0)
+	  console.log(global.cid, uid)
+	}
+      }
 
+      return () => { clearInterval(timer) }   
+    }  
+  }, [chargeCompleted, initial, global.startCharging])
   
+
 
   return (
     <View style={{
@@ -125,6 +139,7 @@ const PostScan = ({ route, navigation : { goBack} }) => {
 	height: 300,
 	width: 300,
       }}
+
     />
 
     <Text style=
@@ -134,14 +149,24 @@ const PostScan = ({ route, navigation : { goBack} }) => {
       }}>
       Select Charge Time
     </Text>
-    
+
+    {( !global.startCharging )?
     <Text style=
       {{ color: '#333333',
 	 fontWeight: 'bold',
 	 fontSize: 20,
       }}>
-      Start and Stop charging
+    Pay to Begin Charging
     </Text>
+    :
+    <Text style=
+      {{ color: '#333333',
+	 fontWeight: 'bold',
+	 fontSize: 20,
+      }}>
+    Your bike is charging.
+    </Text>
+    }
     
     
     <View style={{
@@ -152,9 +177,9 @@ const PostScan = ({ route, navigation : { goBack} }) => {
     }}>
 
       
-      <TouchableOpacity
-	style={ globalStyles.button }
-	disabled={ !chargeCompleted }
+    <TouchableOpacity
+    style={ globalStyles.button }
+    disabled={global.startCharging}
 	onPress={() => payAmountWallet(120, globalContext) }>
 	<View style={{ flexDirection: 'row', paddingTop: 20  }}>
 	  <FontAwesomeIcon icon={ faClock  } size={ 26 } />
@@ -164,11 +189,17 @@ const PostScan = ({ route, navigation : { goBack} }) => {
 	  <Text style={ globalStyles.buttonText }> Time Left: </Text>
 	  <Text style={ globalStyles.buttonText }> { time }s </Text>
 	</View>
-
+	{( !global.startCharging )?
 	<View style={{ flexDirection: 'row', paddingTop: 10 }}>
 	  <FontAwesomeIcon icon={ faInr  } size={ 26 }/>
 	  <Text style={ globalStyles.buttonText }> { 120  }</Text>
 	</View>
+	:
+	 <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+	  <Text style={ globalStyles.buttonText }>Paid</Text>
+	</View>
+	}
+	
       </TouchableOpacity>
 
 

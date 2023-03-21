@@ -24,6 +24,18 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 20,
   },
 
+  logout_button: {
+    alignItems: 'center',
+    backgroundColor: '#00ff52',
+    width: 140,
+    height: 50,
+    borderColor: '#00e548',
+    elevation: 7,
+    borderWidth: 5,
+    marginTop: 60, 
+    borderRadius: 10,
+  },
+
   button2: {
     alignItems: 'center',
     backgroundColor: '#00ff52',

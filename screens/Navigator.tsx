@@ -12,6 +12,7 @@ const Navigator = () => {
   const { isLoggedIn, retrieveUserSession } = globalContext
 
   retrieveUserSession()
+  console.log(isLoggedIn)
   
   return(
     

@@ -3,6 +3,7 @@ import { globalStyles } from '../styles/GlobalStyles'
 import { payAmount } from '../utils/UtilityFunctions'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faInr } from '@fortawesome/free-solid-svg-icons/faInr'
+import { faSignOut } from '@fortawesome/free-solid-svg-icons/faSignOut'
 import { Context, UserInfo } from '../utils/GlobalContext'
 
 import {
@@ -17,7 +18,7 @@ const Accounts = () => {
   const windowHeight = useWindowDimensions().height;
 
   const globalContext = useContext(Context)
-  const { domain, retrieveUserSession, uid, name } = globalContext
+  const { domain, retrieveUserSession, uid, name, logoutUserSession } = globalContext
   const [amount, setAmount] = useState(0)
   
   retrieveUserSession()
@@ -107,6 +108,16 @@ const Accounts = () => {
 	    <FontAwesomeIcon icon={ faInr  } size={ 26 }/>
 	    <Text style={ globalStyles.buttonText }> 50 </Text>
 	  
+	  </View>
+	  
+	</TouchableOpacity>
+
+	<TouchableOpacity
+	  style={globalStyles.logout_button}
+	  onPress={() => logoutUserSession() }>  
+	  <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+	    <FontAwesomeIcon icon={ faSignOut  } size={ 26 }/>
+	    <Text style={ globalStyles.buttonText }> Logout </Text>
 	  </View>
 	  
 	</TouchableOpacity>

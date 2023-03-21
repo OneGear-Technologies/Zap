@@ -66,7 +66,7 @@ const UserSignIn = () => {
 	'uid' : phoneNumber,
       })
 
-      fetch(`${domain}/get-name`, {
+      fetch(`${domain}/get-name/`, {
 	method: 'POST',
 	headers: {
 	  'Content-Type': 'application/json',

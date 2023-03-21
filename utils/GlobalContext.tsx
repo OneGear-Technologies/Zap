@@ -45,6 +45,28 @@ const Provider = ( { children }) => {
     }
   }
 
+  async function logoutUserSession() {
+    try {    
+        const session = await EncryptedStorage.getItem("user_session");
+
+        if (session !== undefined && session !== null) {
+	  let userInfo : UserInfo = JSON.parse(session)
+
+	  await EncryptedStorage.setItem(
+            "user_session", null
+          );
+
+	  setIsLoggedIn(false)
+
+	  setUID("")
+	  setName("")
+
+	  return userInfo
+        }
+    } catch (error) {
+      console.log("Unable to store with error: " + error)
+    }
+  }
 
   async function retrieveUserSession() {
     try {    
@@ -69,6 +91,7 @@ const Provider = ( { children }) => {
     isLoggedIn,
     setIsLoggedIn,
     storeUserSession,
+    logoutUserSession,
     retrieveUserSession,
     uid,
     name,
